@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Baby Shower</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Fuente elegante -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Pinyon+Script&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+           margin: 0;
+           padding: 0;
+           font-family: 'Playfair Display', serif;
+           text-align: center;
+
+           background-image: url("{{ url_for('static', filename='fondodeoso.png') }}");
+           background-size: 60%;
+           background-repeat: no-repeat;
+           background-position: center;
+           background-attachment: fixed;
+        }
+
+        .container {
+              position: relative;
+              padding: 60px 20px;
+              max-width: 600px;
+              margin: auto;
+
+              background-color: rgba(255, 255, 255, 0.85);
+              border-radius: 20px;
+        }
+
+        /* TEXTO PADRES */
+        .parents{
+            font-family: 'Pinyon Script', cursive;
+            font-size: 40px;
+            color:#7a5c5c;
+            margin-bottom:20px;
+            animation: aparecer 1.8s ease;
+        }
+
+        /* Animación elegante */
+        @keyframes aparecer{
+            from{
+                opacity:0;
+                transform:translateY(-15px);
+            }
+            to{
+                opacity:1;
+                transform:translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 60px;
+            margin: 10px 0;
+            color: #6b4f4f;
+        }
+
+        h2 {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 50px;
+            margin: 20px 0;
+            color: #7a5c5c;
+        }
+
+        .subtitle {
+            font-size: 22px;
+            margin-bottom: 40px;
+            color: #7a5c5c;
+        }
+
+        .form-box {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-top: 40px;
+        }
+
+        input, select {
+            width: 90%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #e4178b;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #b6045d;
+            transform: scale(1.05);
+        }
+
+        /* MAPA */
+
+        .map-box{
+            margin-top:40px;
+            background:white;
+            padding:20px;
+            border-radius:20px;
+            box-shadow:0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .map-box h3{
+            margin-bottom:15px;
+            color:#b6045d;
+        }
+
+        .map-box iframe{
+            width:100%;
+            height:300px;
+            border:0;
+            border-radius:15px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <p class="parents">Lucas y Lourdes te invitan al</p>
+    <h1>BABY SHOWER</h1>
+    <p class="subtitle">celebrado en honor de</p>
+    <h2>Catalina Acuña</h2>
+
+    <p class="subtitle">DOMINGO 12 DE ABRIL<br>12:00 HORAS HASTA 17:30 PM</p>
+
+    <div class="form-box">
+        <h3>Confirmar asistencia 💖</h3>
+
+        <form method="POST">
+            <input type="text" name="nombre" placeholder="Nombre" required>
+            <input type="text" name="apellido" placeholder="Apellido" required>
+
+            <select name="asistencia" required>
+                <option value="">¿Asistes?</option>
+                <option value="Si">Sí, asistiré</option>
+                <option value="No">No podré asistir</option>
+            </select>
+
+            <button type="submit">Confirmar</button>
+        </form>
+    </div>
+
+    <!-- UBICACIÓN DEL EVENTO -->
+
+    <div class="map-box">
+        <h3>📍 Ubicación del evento</h3>
+
+        <iframe 
+        src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d890.2680610310483!2d-65.1987726!3d-26.8058282!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94225c2ef1e0e00d%3A0x33505edc0fcf808d!2sClub%20de%20la%20Amistad%20%2220%20de%20Julio%22!5e0!3m2!1ses!2sar!4v1773188734095!5m2!1ses!2sar"
+        width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+
+        <p style="margin-top:10px;color:#7a5c5c;font-size:15px;">
+        Toca el mapa para abrir la ubicación en Google Maps
+        </p>
+
+    </div>
+
+</div>
+
+</body>
+</html>

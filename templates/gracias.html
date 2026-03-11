@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gracias</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Fuente elegante -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Pinyon+Script&display=swap" rel="stylesheet">
+
+    <style>
+
+        body{
+            margin:0;
+            padding:0;
+            font-family:'Playfair Display', serif;
+            text-align:center;
+
+            background-image: url("{{ url_for('static', filename='fondodeoso.png') }}");
+            background-size:60%;
+            background-repeat:no-repeat;
+            background-position:center;
+            background-attachment:fixed;
+
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            min-height:100vh;
+            padding:20px;
+        }
+
+        .box{
+            background:rgba(255,255,255,0.9);
+            padding:60px 40px;
+            border-radius:20px;
+            box-shadow:0 10px 30px rgba(0,0,0,0.1);
+            max-width:500px;
+            width:100%;
+        }
+
+        h1{
+            font-size:40px;
+            color:#6b4f4f;
+            margin-bottom:20px;
+        }
+
+        p{
+            font-size:20px;
+            color:#7a5c5c;
+        }
+
+        .name{
+            font-family:'Pinyon Script', cursive;
+            font-size:45px;
+            margin-top:10px;
+            color:#7a5c5c;
+        }
+
+        a{
+            display:inline-block;
+            margin-top:35px;
+            text-decoration:none;
+            color:white;
+            background:#e91e63;
+            padding:12px 30px;
+            border-radius:25px;
+            transition:0.3s ease;
+            box-shadow:0 5px 15px rgba(233,30,99,0.4);
+        }
+
+        a:hover{
+            background:#c2185b;
+            transform:scale(1.05);
+        }
+
+        /* 📱 Celulares */
+
+        @media (max-width:480px){
+
+            .box{
+                padding:40px 25px;
+            }
+
+            h1{
+                font-size:28px;
+            }
+
+            .name{
+                font-size:35px;
+            }
+
+            p{
+                font-size:18px;
+            }
+
+            a{
+                width:100%;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="box">
+
+        <h1>💖 ¡Gracias! 💖</h1>
+
+        <p>Tu respuesta fue registrada.</p>
+
+        <p>Te esperamos en el Baby Shower de</p>
+
+        <div class="name">Catalina</div>
+
+        <a href="/">Volver</a>
+
+    </div>
+
+</body>
+</html>
