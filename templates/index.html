@@ -19,7 +19,7 @@
            background-size: 60%;
            background-repeat: no-repeat;
            background-position: center;
-           background-attachment: fixed;
+           background-attachment: scroll;
         }
 
         .container {
@@ -127,6 +127,14 @@
             height:300px;
             border:0;
             border-radius:15px;
+        }
+
+        /* 📱 Ajuste para celulares (solo fondo) */
+
+        @media (max-width:480px){
+            body{
+                background-size:90%;
+            }
         }
 
     </style>
