@@ -1,10 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
 from datetime import datetime
+import os  
 
 app = Flask(__name__)
 
-DATABASE = "database.db"
+DATABASE = os.environ.get("DATABASE_URL", "database.db")
 
 
 # -------------------------
