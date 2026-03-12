@@ -36,6 +36,10 @@ def init_db():
     conn.close()
 
 
+# 🔹 IMPORTANTE: asegurar que la DB exista siempre
+init_db()
+
+
 # -------------------------
 # INDEX
 # -------------------------
