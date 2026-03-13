@@ -85,15 +85,15 @@ def index():
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        if DATABASE_URL:
+        if DATABASE_URL and psycopg2:
             cursor.execute(
                 "INSERT INTO invitados (nombre, apellido, asistencia, fecha) VALUES (%s,%s,%s,%s)",
-                (nombre, apellido, asistencia, fecha)
+                 (nombre, apellido, asistencia, fecha)
             )
         else:
             cursor.execute(
                 "INSERT INTO invitados (nombre, apellido, asistencia, fecha) VALUES (?,?,?,?)",
-                (nombre, apellido, asistencia, fecha)
+                 (nombre, apellido, asistencia, fecha)
             )
 
         conn.commit()
