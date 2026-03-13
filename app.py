@@ -5,6 +5,7 @@ import os
 
 try:
     import psycopg2
+    from psycopg2.extras import RealDictCursor
 except:
     psycopg2 = None
 
@@ -25,7 +26,7 @@ def get_db_connection():
         if url.startswith("postgres://"):
             url = url.replace("postgres://", "postgresql://", 1)
 
-        conn = psycopg2.connect(url)
+        conn = psycopg2.connect(url, cursor_factory=RealDictCursor)
         return conn
 
     else:
@@ -81,9 +82,12 @@ def index():
 
     if request.method == "POST":
 
-        nombre = request.form["nombre"]
-        apellido = request.form["apellido"]
-        asistencia = request.form["asistencia"]
+        nombre = request.form.get("nombre")
+        apellido = request.form.get("apellido")
+        asistencia = request.form.get("asistencia")
+
+        if not nombre or not apellido or not asistencia:
+            return "Faltan datos"
 
         fecha = datetime.now().strftime("%d/%m/%Y %H:%M")
 
@@ -131,10 +135,7 @@ def admin():
 
     conn.close()
 
-    if DATABASE_URL:
-        total = sum(1 for i in invitados if i[3] == "Si")
-    else:
-        total = sum(1 for i in invitados if i["asistencia"] == "Si")
+    total = sum(1 for i in invitados if i["asistencia"] == "Si")
 
     return render_template("admin.html", invitados=invitados, total=total)
 
@@ -163,4 +164,5 @@ def eliminar(id):
 # RUN
 # -------------------------
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
