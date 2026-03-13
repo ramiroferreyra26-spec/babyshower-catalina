@@ -18,17 +18,14 @@ DATABASE_URL = os.environ.get("DATABASE_URL")
 # CONEXIÓN A BASE DE DATOS
 # -------------------------
 def get_db_connection():
-
     if DATABASE_URL and psycopg2:
-
         url = DATABASE_URL
-
         if url.startswith("postgres://"):
             url = url.replace("postgres://", "postgresql://", 1)
 
-        conn = psycopg2.connect(url, cursor_factory=RealDictCursor)
+        # CLAVE: sslmode=require para Render
+        conn = psycopg2.connect(url, sslmode="require", cursor_factory=RealDictCursor)
         return conn
-
     else:
         conn = sqlite3.connect("database.db")
         conn.row_factory = sqlite3.Row
@@ -39,12 +36,10 @@ def get_db_connection():
 # CREAR TABLA
 # -------------------------
 def init_db():
-
     conn = get_db_connection()
     cursor = conn.cursor()
 
     if DATABASE_URL:
-
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS invitados (
             id SERIAL PRIMARY KEY,
@@ -54,9 +49,7 @@ def init_db():
             fecha TEXT NOT NULL
         )
         """)
-
     else:
-
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS invitados (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -79,9 +72,7 @@ init_db()
 # -------------------------
 @app.route("/", methods=["GET", "POST"])
 def index():
-
     if request.method == "POST":
-
         nombre = request.form.get("nombre")
         apellido = request.form.get("apellido")
         asistencia = request.form.get("asistencia")
@@ -126,7 +117,6 @@ def gracias():
 # -------------------------
 @app.route("/admin")
 def admin():
-
     conn = get_db_connection()
     cursor = conn.cursor()
 
@@ -145,7 +135,6 @@ def admin():
 # -------------------------
 @app.route("/eliminar/<int:id>", methods=["POST"])
 def eliminar(id):
-
     conn = get_db_connection()
     cursor = conn.cursor()
 
