@@ -2,7 +2,11 @@ from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
 from datetime import datetime
 import os
-import psycopg2
+
+try:
+    import psycopg2
+except:
+    psycopg2 = None
 
 app = Flask(__name__)
 
@@ -13,9 +17,17 @@ DATABASE_URL = os.environ.get("DATABASE_URL")
 # CONEXIÓN A BASE DE DATOS
 # -------------------------
 def get_db_connection():
-    if DATABASE_URL:
-        conn = psycopg2.connect(DATABASE_URL)
+
+    if DATABASE_URL and psycopg2:
+
+        url = DATABASE_URL
+
+        if url.startswith("postgres://"):
+            url = url.replace("postgres://", "postgresql://", 1)
+
+        conn = psycopg2.connect(url)
         return conn
+
     else:
         conn = sqlite3.connect("database.db")
         conn.row_factory = sqlite3.Row
@@ -23,38 +35,41 @@ def get_db_connection():
 
 
 # -------------------------
-# CREAR TABLA SI NO EXISTE
+# CREAR TABLA
 # -------------------------
 def init_db():
+
     conn = get_db_connection()
     cursor = conn.cursor()
 
     if DATABASE_URL:
+
         cursor.execute("""
-            CREATE TABLE IF NOT EXISTS invitados (
-                id SERIAL PRIMARY KEY,
-                nombre TEXT NOT NULL,
-                apellido TEXT NOT NULL,
-                asistencia TEXT NOT NULL,
-                fecha TEXT NOT NULL
-            )
+        CREATE TABLE IF NOT EXISTS invitados (
+            id SERIAL PRIMARY KEY,
+            nombre TEXT NOT NULL,
+            apellido TEXT NOT NULL,
+            asistencia TEXT NOT NULL,
+            fecha TEXT NOT NULL
+        )
         """)
+
     else:
+
         cursor.execute("""
-            CREATE TABLE IF NOT EXISTS invitados (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                nombre TEXT NOT NULL,
-                apellido TEXT NOT NULL,
-                asistencia TEXT NOT NULL,
-                fecha TEXT NOT NULL
-            )
+        CREATE TABLE IF NOT EXISTS invitados (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nombre TEXT NOT NULL,
+            apellido TEXT NOT NULL,
+            asistencia TEXT NOT NULL,
+            fecha TEXT NOT NULL
+        )
         """)
 
     conn.commit()
     conn.close()
 
 
-# asegurar que la DB exista
 init_db()
 
 
@@ -63,13 +78,12 @@ init_db()
 # -------------------------
 @app.route("/", methods=["GET", "POST"])
 def index():
-    if request.method == "POST":
-        nombre = request.form.get("nombre")
-        apellido = request.form.get("apellido")
-        asistencia = request.form.get("asistencia")
 
-        if not nombre or not apellido or not asistencia:
-            return "Faltan datos"
+    if request.method == "POST":
+
+        nombre = request.form["nombre"]
+        apellido = request.form["apellido"]
+        asistencia = request.form["asistencia"]
 
         fecha = datetime.now().strftime("%d/%m/%Y %H:%M")
 
@@ -78,12 +92,12 @@ def index():
 
         if DATABASE_URL:
             cursor.execute(
-                "INSERT INTO invitados (nombre, apellido, asistencia, fecha) VALUES (%s, %s, %s, %s)",
+                "INSERT INTO invitados (nombre, apellido, asistencia, fecha) VALUES (%s,%s,%s,%s)",
                 (nombre, apellido, asistencia, fecha)
             )
         else:
             cursor.execute(
-                "INSERT INTO invitados (nombre, apellido, asistencia, fecha) VALUES (?, ?, ?, ?)",
+                "INSERT INTO invitados (nombre, apellido, asistencia, fecha) VALUES (?,?,?,?)",
                 (nombre, apellido, asistencia, fecha)
             )
 
@@ -104,10 +118,11 @@ def gracias():
 
 
 # -------------------------
-# PANEL ADMIN
+# ADMIN
 # -------------------------
 @app.route("/admin")
 def admin():
+
     conn = get_db_connection()
     cursor = conn.cursor()
 
@@ -125,17 +140,18 @@ def admin():
 
 
 # -------------------------
-# ELIMINAR INVITADO
+# ELIMINAR
 # -------------------------
 @app.route("/eliminar/<int:id>", methods=["POST"])
 def eliminar(id):
+
     conn = get_db_connection()
     cursor = conn.cursor()
 
     if DATABASE_URL:
-        cursor.execute("DELETE FROM invitados WHERE id = %s", (id,))
+        cursor.execute("DELETE FROM invitados WHERE id=%s", (id,))
     else:
-        cursor.execute("DELETE FROM invitados WHERE id = ?", (id,))
+        cursor.execute("DELETE FROM invitados WHERE id=?", (id,))
 
     conn.commit()
     conn.close()
@@ -144,8 +160,7 @@ def eliminar(id):
 
 
 # -------------------------
-# INICIAR APP
+# RUN
 # -------------------------
 if __name__ == "__main__":
-    init_db()
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5000)
